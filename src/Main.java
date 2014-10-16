@@ -1,28 +1,23 @@
 import analytics.base.RawSignal;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
-import groovy.json.internal.Charsets;
 import groovy.util.XmlSlurper;
 import groovy.util.slurpersupport.GPathResult;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.Charset;
 import java.util.Arrays;
-import java.util.List;
 
 import static java.nio.file.Files.readAllBytes;
-import static java.nio.file.Files.readAllLines;
 import static java.nio.file.Paths.get;
 import static java.lang.System.out;
 
 public class Main {
 
     private static XStream xstream = new XStream(new JettisonMappedXmlDriver());
+
     public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException {
 
         String status = "StatusJSONImpl{createdAt=Fri Oct 10 21:06:30 EDT 2014, id=520742199693438976, text='RT @SNFonNBC: After today, the @dallascowboys are 4-1 for the first time since 2008. #FootballNightInAmerica http://t.co/BvssPy1TdY', source='<a href=\"http://www.socialbusinessindex.com\" rel=\"nofollow\">Social Business Index</a>', isTruncated=false, inReplyToStatusId=-1, inReplyToUserId=-1, isFavorited=false, isRetweeted=true, favoriteCount=0, inReplyToScreenName='null', geoLocation=null, place=null, retweetCount=90, isPossiblySensitive=false, isoLanguageCode='null', lang='en', contributorsIDs=[], retweetedStatus=StatusJSONImpl{createdAt=Sun Oct 05 19:56:41 EDT 2014, id=518912691738779649, text='After today, the @dallascowboys are 4-1 for the first time since 2008. #FootballNightInAmerica http://t.co/BvssPy1TdY', source='<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>', isTruncated=false, inReplyToStatusId=-1, inReplyToUserId=-1, isFavorited=false, isRetweeted=true, favoriteCount=70, inReplyToScreenName='null', geoLocation=null, place=null, retweetCount=90, isPossiblySensitive=false, isoLanguageCode='null', lang='en', contributorsIDs=[], retweetedStatus=null, userMentionEntities=[UserMentionEntityJSONImpl{name='Dallas Cowboys', screenName='dallascowboys', id=8824902}], urlEntities=[], hashtagEntities=[HashtagEntityJSONImpl{text='FootballNightInAmerica'}], mediaEntities=[MediaEntityJSONImpl{id=518912690920906752, url=http://t.co/BvssPy1TdY, mediaURL=http://pbs.twimg.com/media/BzOMV9PIYAAbLuF.png, mediaURLHttps=https://pbs.twimg.com/media/BzOMV9PIYAAbLuF.png, expandedURL=http://twitter.com/SNFonNBC/status/518912691738779649/photo/1, displayURL='pic.twitter.com/BvssPy1TdY', sizes={0=Size{width=150, height=150, resize=101}, 1=Size{width=340, height=173, resize=100}, 2=Size{width=600, height=305, resize=100}, 3=Size{width=801, height=408, resize=100}}, type=photo}], symbolEntities=[], currentUserRetweetId=-1, user=UserJSONImpl{id=167155452, name='SNF on NBC', screenName='SNFonNBC', location='NBC', description='The official Twitter of Sunday Night Football on NBC. \n" +
@@ -60,15 +55,12 @@ public class Main {
         out.println("******** DESERIALIZED (1) YOUTUBE RAW: \n" + youtube2);
 
 
-
         // ********* XML PARSING
         XmlSlurper xmlSlurper = new XmlSlurper();
         for (Object deserializedRaw : Arrays.asList(youtube1, youtube2)) {
+            String xml = ((RawSignal) deserializedRaw).getObject().toString();
 
-            //NOT WORKING EXAMPLE
-          String xml = ((RawSignal) deserializedRaw).getObject().toString();
-
-//          GPathResult parsedXml = xmlSlurper.parse(xml); //parsing crappy chars
+//          GPathResult parsedXml = xmlSlurper.parse(xml); //not working - parsing crappy chars
 
             GPathResult parsed = xmlSlurper.parse(new ByteArrayInputStream(xml.getBytes("utf-8")));
             out.print("******* PARSED XML: \n " + parsed);
