@@ -52,7 +52,7 @@ public class Main {
 
         String rawYoutube2 = new String(readAllBytes(get("src/yt/nravideosVIDEOWkrStEe3H0UYOUTUBE")));
         Object youtube2 = xstream.fromXML(rawYoutube2);
-        out.println("******** DESERIALIZED (1) YOUTUBE RAW: \n" + youtube2);
+        out.println("******** DESERIALIZED (2) YOUTUBE RAW: \n" + youtube2);
 
 
         // ********* XML PARSING
@@ -63,7 +63,7 @@ public class Main {
 //          GPathResult parsedXml = xmlSlurper.parse(xml); //not working - parsing crappy chars
 
             GPathResult parsed = xmlSlurper.parse(new ByteArrayInputStream(xml.getBytes("utf-8")));
-            out.print("******* PARSED XML: \n " + parsed);
+            out.print("*********** PARSED XML: \n " + parsed);
         }
     }
 }
